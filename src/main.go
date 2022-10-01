@@ -77,7 +77,19 @@ func handleFunc(db *sql.DB, opts []wmenu.Opt) {
 		addCarta(db, newCarta)
 
 	case 1:
-		fmt.Println("Encontrando carta...")
+		reader := bufio.NewReader(os.Stdin)
+		fmt.Print("Entre o nome da carta ou numero para pesquisa: ")
+		searchString, _ := reader.ReadString('\n')
+		searchString = trimLine(searchString)
+
+		carta := searchCarta(db, searchString)
+
+		fmt.Printf("Encontrado %v resultado", len(carta))
+
+		for _, buscaCarta := range carta {
+			fmt.Printf("\n----\nNumero: %s\nNome: %s\nDescrição: %s\n", buscaCarta.Numero, buscaCarta.Nome, buscaCarta.Desc)
+		}
+
 	case 2:
 		fmt.Println("Atualizando carta...")
 	case 3:

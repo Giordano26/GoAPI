@@ -23,3 +23,34 @@ func addCarta(db *sql.DB, newCarta carta) {
 
 	fmt.Printf("Adicionada a carta %v com sucesso!\n", newCarta.Nome)
 }
+
+func searchCarta(db *sql.DB, searchString string) []carta {
+
+	rows, err := db.Query("SELECT id, Numero, Nome, Desc FROM Cartas WHERE Nome like '%" + searchString + "%' OR Numero like '%" + searchString + "%'")
+	checkError(err)
+
+	defer rows.Close()
+
+	err = rows.Err()
+
+	checkError(err)
+
+	cartas := make([]carta, 0)
+
+	for rows.Next() {
+		buscaCarta := carta{}
+
+		err = rows.Scan(&buscaCarta.id, &buscaCarta.Numero, &buscaCarta.Nome, &buscaCarta.Desc)
+
+		checkError(err)
+
+		cartas = append(cartas, buscaCarta)
+	}
+
+	err = rows.Err()
+
+	checkError(err)
+
+	return cartas
+
+}
