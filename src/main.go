@@ -37,10 +37,11 @@ func main() {
 	menu.Action(func(opts []wmenu.Opt) error { handleFunc(db, opts); return nil })
 
 	menu.Option("Criar Carta", 0, true, nil)
-	menu.Option("Encontrar Carta", 1, false, nil)
-	menu.Option("Atualizar Carta", 2, false, nil)
-	menu.Option("Deletar Carta", 3, false, nil)
-	menu.Option("Desligar", 4, false, nil)
+	menu.Option("Listar Cartas", 1, false, nil)
+	menu.Option("Encontrar Carta", 2, false, nil)
+	menu.Option("Atualizar Carta", 3, false, nil)
+	menu.Option("Deletar Carta", 4, false, nil)
+	menu.Option("Desligar", 5, false, nil)
 
 	menuErr := menu.Run()
 	checkError(menuErr)
@@ -77,6 +78,16 @@ func handleFunc(db *sql.DB, opts []wmenu.Opt) {
 		addCarta(db, newCarta)
 
 	case 1:
+
+		carta := listarCartas(db)
+
+		fmt.Printf("Encontrado %v resultados", len(carta))
+
+		for _, buscaCarta := range carta {
+			fmt.Printf("\n----\nID: %d \nNumero: %s\nNome: %s\nDescrição: %s\n", buscaCarta.id, buscaCarta.Numero, buscaCarta.Nome, buscaCarta.Desc)
+		}
+
+	case 2:
 		reader := bufio.NewReader(os.Stdin)
 		fmt.Print("Entre o nome da carta ou numero para pesquisa: ")
 		searchString, _ := reader.ReadString('\n')
@@ -84,17 +95,17 @@ func handleFunc(db *sql.DB, opts []wmenu.Opt) {
 
 		carta := searchCarta(db, searchString)
 
-		fmt.Printf("Encontrado %v resultado", len(carta))
+		fmt.Printf("Encontrado %v resultados", len(carta))
 
 		for _, buscaCarta := range carta {
-			fmt.Printf("\n----\nNumero: %s\nNome: %s\nDescrição: %s\n", buscaCarta.Numero, buscaCarta.Nome, buscaCarta.Desc)
+			fmt.Printf("\n----\nID: %d \nNumero: %s\nNome: %s\nDescrição: %s\n", buscaCarta.id, buscaCarta.Numero, buscaCarta.Nome, buscaCarta.Desc)
 		}
 
-	case 2:
-		fmt.Println("Atualizando carta...")
 	case 3:
-		fmt.Println("Deletando carta...")
+		fmt.Println("Atualizando carta...")
 	case 4:
+		fmt.Println("Deletando carta...")
+	case 5:
 		fmt.Println("Desligando...")
 
 	}
