@@ -104,9 +104,20 @@ func handleFunc(db *sql.DB, opts []wmenu.Opt) {
 	case 3:
 		fmt.Println("Atualizando carta...") // work in progress
 	case 4:
-		fmt.Println("Deletando carta...")
+		reader := bufio.NewReader(os.Stdin)
+		fmt.Print("Entre com a ID da carta que deseja deletar: ")
+		searchString, _ := reader.ReadString('\n')
+
+		idToDelete := trimLine(searchString)
+
+		affected := deleteCard(db, idToDelete)
+
+		if affected == 1 {
+			fmt.Println("Carta deletada do banco de dados")
+		}
+
 	case 5:
-		fmt.Println("Goodbye!")
+		fmt.Println("Desligando...")
 		os.Exit(3)
 
 	}

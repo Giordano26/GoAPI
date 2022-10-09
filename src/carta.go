@@ -83,3 +83,18 @@ func searchCarta(db *sql.DB, searchString string) []carta {
 	return cartas
 
 }
+
+func deleteCard(db *sql.DB, idToDelete string) int64 {
+	stmt, err := db.Prepare("DELETE FROM Cartas where id = ?")
+
+	checkError(err)
+	defer stmt.Close()
+
+	res, err := stmt.Exec(idToDelete)
+	checkError(err)
+
+	affected, err := res.RowsAffected()
+	checkError(err)
+
+	return affected
+}
