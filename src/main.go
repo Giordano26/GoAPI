@@ -102,11 +102,12 @@ func handleFunc(db *sql.DB, opts []wmenu.Opt) {
 		}
 
 	case 3:
-		fmt.Println("Atualizando carta...")
+		fmt.Println("Atualizando carta...") // work in progress
 	case 4:
 		fmt.Println("Deletando carta...")
 	case 5:
-		fmt.Println("Desligando...")
+		fmt.Println("Goodbye!")
+		os.Exit(3)
 
 	}
 
